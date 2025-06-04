@@ -82,6 +82,7 @@ else:
 params_szifi['inpaint'] = True
 params_szifi['deproject_cib'] = None
 params_szifi['estimate_spec'] = 'estimate'
+params_szifi['save_coupling_matrix'] = True
 
 # SNR threshold to consider a preliminary "detection"
 params_szifi['q_th'] = 4.0
