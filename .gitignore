@@ -1,1 +1,7 @@
 camb_output*
+model_soubhik*
+szifi.egg-in*
+outputs_planck/*
+dist/*
+build/*
+.ipynb_checkpoint*

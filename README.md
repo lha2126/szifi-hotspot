@@ -20,7 +20,7 @@ Dependencies: [astropy](https://www.astropy.org), [healpy](https://healpy.readth
 
 ### Hotspot Notes
 This version has been heavily modified by Oliver Philcox to add inflationary signatures as in https://arxiv.org/abs/2405.03738. The basic usage is the following:
-- Run ```planck_pr4_analysis_compsep.py {TYPE} {INDEX}``` for indices 1 to 768. This will split the dataset into 768 flat-sky tiles and search for either hotspots (TYPE = soubhik), tSZ clusters (TYPE = arnaud), or point-sources (TYPE = point) in each. Note that the first run will be slow since the code computes (expensive) coupling matrices that are saved for later use. The precise settings can be altered in the file.
+- Run ```planck_pr4_analysis_compsep.py {TYPE} {INDEX}``` for indices 1 to 768. This will split the dataset into 768 flat-sky tiles and search for either hotspots (TYPE = soubhik), tSZ clusters (TYPE = arnaud), or point-sources (TYPE = point) in each. Note that the first run will be slow since the code computes (expensive) coupling matrices that are saved for later use. The precise settings can be altered in the file. Since we're working with masked component-separated maps, we should only need TYPE = soubhik here. 
 - Run the Jupyter notebook to combine the catalogs. 
 
 

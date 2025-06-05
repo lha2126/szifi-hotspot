@@ -1,9 +1,12 @@
-## Code to search for hotspots (or other sources) using a Planck PR4 component-separated temperature map
+## Code to search for hotspots using a Planck PR4 component-separated temperature map
+# Note that the code is slow the first time it's run, since it computes coupling matrices that are then saved for later use
+# We also compute and save each hotspot profile the first time we use it.
+# By default, this uses the component-separated maps, which do not contain tSZ clusters. We also mask out any point sources and the galactic plane.
+# We should set source_type = soubhik here. The other settings are only needed for multi-frequency analyses.
 
 # Imports
 import numpy as np, szifi, healpy as hp, sys, os
 import matplotlib.pyplot as plt
-
 
 ## Input options
 assert len(sys.argv) == 3, "Must supply analysis type and tile number"
@@ -136,6 +139,7 @@ else:
     
     # Parameters
     freqs = ['100'] # dummy, not used directly
+    if len(freqs)==0: assert source_type=='soubhik': "Must use full frequency maps to find point-sources and tSZ clusters"
 
     # Load component-separated temperature maps
     print("Loading component-separation maps")
@@ -205,4 +209,6 @@ try:
 except TypeError:
     catalogue = szifi.cat.cluster_catalogue()
 
-np.save(output_dir+'planck_sep_batch%d_%s.npy'%(tile_no,source_type),catalogue)
+print("Detections SNR after combination", catalogue.catalogue['q_opt'])
+
+np.save(output_dir+'planck_sep_batch%d_%s.npy'%(tile_no,source_type), [catalogue], allow_pickle=True)

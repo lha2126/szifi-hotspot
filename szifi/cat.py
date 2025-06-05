@@ -346,7 +346,7 @@ def get_catalogue_q_th(cat,q_th):
     indices = np.where(cat.catalogue["q_opt"] >= q_th)
     if len(indices[0])==0:
         return cluster_catalogue()
-
+    
     return get_catalogue_indices(cat,indices)
 
 def get_catalogue_indices(cat_old,indices):
