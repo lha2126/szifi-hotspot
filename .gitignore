@@ -1,7 +1,9 @@
+injection300*
 camb_output*
 model_soubhik*
 szifi.egg-in*
 outputs_planck/*
+outputs_injected/*
 dist/*
 build/*
 .ipynb_checkpoint*

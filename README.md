@@ -18,13 +18,9 @@ import szifi
 ```
 Dependencies: [astropy](https://www.astropy.org), [healpy](https://healpy.readthedocs.io/en/latest/), [pymaster](https://namaster.readthedocs.io), [scikit-learn](https://scikit-learn.org/stable/).
 
-### Hotspot Notes
-This version has been heavily modified by Oliver Philcox to add inflationary signatures as in https://arxiv.org/abs/2405.03738. The basic usage is the following:
-- Run ```planck_pr4_analysis_compsep.py {TYPE} {INDEX}``` for indices 1 to 768. This will split the dataset into 768 flat-sky tiles and search for either hotspots (TYPE = soubhik), tSZ clusters (TYPE = arnaud), or point-sources (TYPE = point) in each. Note that the first run will be slow since the code computes (expensive) coupling matrices that are saved for later use. The precise settings can be altered in the file. Since we're working with masked component-separated maps, we should only need TYPE = soubhik here. 
-- Run the Jupyter notebook to combine the catalogs. 
-
-
-### Sample scripts
-
-Several sample scripts illustrating how the code works are included in szifi/test_files. In order to be able to run them, please download the data [here](https://drive.google.com/drive/folders/1_O48SQ5aPTaW32MAzBF6SEX7HyPvRoXM?usp=sharing) and put it in a new directory called szifi/data.
-
+### Oliver's Hotspot Notes
+This version has been heavily modified by Oliver Philcox and Colin Hill to add inflationary signatures as in https://arxiv.org/abs/2405.03738. The basic routines are the following:
+- ```planck_pr4_analysis_compsep.py {TYPE} {INDEX}```. This will split the Planck temperature dataset into 768 flat-sky tiles (INDEX = 0-767) and search for either hotspots (TYPE = soubhik), tSZ clusters (TYPE = arnaud), or point-sources (TYPE = point) in each. Note that the first run will be slow since the code computes (expensive) coupling matrices that are saved for later use. The precise settings can be altered in the file. Since we're working with masked component-separated maps, we should only need TYPE = soubhik here. 
+- ```Planck-Analysis.ipynb```. Analyze the Planck hotspot candidates computed using the python script.
+- ```injected_analysis_compsep.py {g} {INDEX}```. This splits a simulation into 768 flat-sky tiles as before, and injects 300 well-separated hotspots with some value of g. It then seaerches for hotspots, as before.
+- ```Injection-Test.ipynb```. Create a map of injected point sources which are used in the python script. Also analyze the results of the python script and make a bunch of plots.
