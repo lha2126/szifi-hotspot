@@ -15,11 +15,11 @@ params_data = szifi.params_data_default
 params_model = szifi.params_model_default
 
 # Data paths
-params_szifi['path'] = '/mnt/home/ophilcox/szifi/'
+params_szifi['path'] = '/insomnia001/home/lha2126/szifi/'
 if analysis_type =='point':
-    cutout_dir = '/mnt/home/ophilcox/ceph/szifi_cutouts/ffp10_%d_raw/'%sim_no
+    cutout_dir = '/insomnia001/home/lha2126/ceph/szifi_cutouts/ffp10_%d_raw/'%sim_no
 else:
-    cutout_dir = '/mnt/home/ophilcox/ceph/szifi_cutouts/ffp10_%d_cleaned/'%sim_no
+    cutout_dir = '/insomnia001/home/lha2126/ceph/szifi_cutouts/ffp10_%d_cleaned/'%sim_no
 if not os.path.exists(cutout_dir): os.makedirs(cutout_dir)
 params_szifi['path_data'] = cutout_dir 
 
@@ -108,11 +108,11 @@ else:
     print("Loading simulation %d"%sim_no)
 
     # Parameters
-    sim_dir = '/mnt/home/ophilcox/ceph/planck_pr4_freq/'
+    sim_dir = '/insomnia001/home/lha2126/ceph/planck_pr4_freq/'
     freqs = ['100','143','217','353','545','857']
 
     # Load dipole
-    dipole_map = hp.ud_grade(hp.read_map('/mnt/home/ophilcox/ceph/planck_npipe/commander/dipole_CMB_n4096_K.fits',field=[0]),2048)
+    dipole_map = hp.ud_grade(hp.read_map('/insomnia001/home/lha2126/ceph/planck_npipe/commander/dipole_CMB_n4096_K.fits',field=[0]),2048)
 
     # Load frequency maps
     print("Loading frequency maps")
@@ -121,7 +121,7 @@ else:
         freq_maps.append(hp.read_map(sim_dir+'%s/npipe6v20_%s_map.fits'%(str(sim_no+200).zfill(4),freqs[f]),field=0)-dipole_map)
     
     # Load point-source mask
-    planck_dir = '/mnt/home/ophilcox/ceph/planck_pr3_raw/'
+    planck_dir = '/insomnia001/home/lha2126/ceph/planck_pr3_raw/'
     if analysis_type != 'point':
         print("Loading point mask")
         all_point = hp.ud_grade(hp.read_map(sim_dir+'%s/point_mask_snr10.fits'%str(sim_no+200).zfill(4)),2048)
@@ -296,7 +296,7 @@ for profile_id in range(len(lon)):
 
         template_map[close_pix,:] += tem_interps[pid](dis).T
         
-outmap = '/mnt/home/ophilcox/ceph/szifi_cutouts/cutout300_pairs_sim%d.fits'%sim_no
+outmap = '/insomnia001/home/lha2126/ceph/szifi_cutouts/cutout300_pairs_sim%d.fits'%sim_no
 if os.path.exists(outmap):
     os.remove(outmap)
 hp.write_map(outmap, np.asarray(template_map.T,dtype='float64'), overwrite=True)

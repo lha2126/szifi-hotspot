@@ -19,7 +19,7 @@ class experiment:
             self.nu_eff = np.array([101.31])*1e9
             
             # Load beam
-            self.beams = [fits.open('/mnt/home/ophilcox/ceph/planck_npipe/COM_CMB_IQU-smica_2048_R3.00_full.fits',field=2)[2].data['INT_BEAM'][:4001]]
+            self.beams = [fits.open('/insomnia001/home/lha2126/ceph/planck_npipe/COM_CMB_IQU-smica_2048_R3.00_full.fits',field=2)[2].data['INT_BEAM'][:4001]]
             
             self.FWHM = np.array([5.0]) 
             
@@ -32,7 +32,7 @@ class experiment:
             self.nu_eff = np.array([101.31])*1e9
             
             # Load beam
-            self.beams = [fits.open('/mnt/home/ophilcox/ceph/planck_npipe/COM_CMB_IQU-smica_2048_R3.00_full.fits',field=2)[2].data['INT_BEAM'][:4001]]
+            self.beams = [fits.open('/insomnia001/home/lha2126/ceph/planck_npipe/COM_CMB_IQU-smica_2048_R3.00_full.fits',field=2)[2].data['INT_BEAM'][:4001]]
             self.beams[0][2:] = 1.
             
             self.FWHM = np.array([0.0]) 

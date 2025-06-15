@@ -1,3 +1,4 @@
+#LHA TESTING A CHANGE TO ADD A soubhik_E + soubhik_E versus soubhik
 import numpy as np
 import os
 from scipy import integrate, interpolate
@@ -369,89 +370,70 @@ class gnfw:
         return ret
 
 from scipy.special import spherical_jn,sici,lpmn
-#I have changed this class marginally to branch for E versus T computation-->type, etc stays the same           
-class png: 
-
-    def __init__(self,model_params={},kmin=1e-6,kmax=1,lmax=3500,reduce_k=10,type="soubhik"):
-        """Set-up, including defining theta_Delta width, relative to distance to cluster. "type" controls the type of profile."""
-
-        # Create variables
+            
+class png:
+#Want things to work as follow--Initiallize type soubhik_$T/E$--> where it starts as all the same, then we separation comes later 
+    def __init__(self, model_params={}, kmin=1e-6, kmax=1, lmax=3500, reduce_k=10, type="soubhik_T"):
+        """Initialize profile for either T or E modes."""
         self.type = type
-       # self.hmode = hmode
         self.kmin = kmin
         self.kmax = kmax
         self.lmax = lmax
         self.reduce_k = reduce_k
-        
-        # Calculate basic quantities
-        # Run CAMB
+
+        # Common setup (CAMB, background cosmology)
         import camb
         pars = camb.CAMBparams()
-        pars.set_cosmology(H0=67.32, ombh2=0.022383, omch2=0.12011,tau=0.0543,mnu=0.06,omk=0,standard_neutrino_neff=True)
-        As = 1e-10*np.exp(3.0448)
-        pars.InitPower.set_params(ns=0.96605,r=0.,pivot_scalar=0.05,As=As)
+        pars.set_cosmology(H0=67.32, ombh2=0.022383, omch2=0.12011, tau=0.0543, mnu=0.06, omk=0)
+        As = 1e-10 * np.exp(3.0448)
+        pars.InitPower.set_params(ns=0.96605, r=0., pivot_scalar=0.05, As=As)
+        self.H2_dotphi = np.sqrt(As * 4. * np.pi**2.)
 
-        DeltaSq_zeta = As*2*np.pi**2 # primordial amplitude (from Planck)
-        self.H2_dotphi = np.sqrt(As*4.*np.pi**2.) # H^2 / dot{phi} in inflation [if scale invariant]
-        
-        # Compute distance to last scattering (or peak thereof)
         back = camb.get_background(pars)
-        self.eta_rec = back.tau_maxvis # comoving horizon at last-scattering
-        self.eta_0 = back.tau0 # comoving horizon today
-        
+        self.eta_rec = back.tau_maxvis
+        self.eta_0 = back.tau0
+
         # Load transfer function
-        assert lmax<=3500, "Transfer function only computed up to lmax = 3500"
-        transfer = np.load('camb_output3500_Ecorrected.npz') #camb_output3500.npz
+        assert lmax <= 3500, "Transfer function only computed up to lmax=3500"
+        transfer = np.load('camb_output3500.npz')
         k = transfer['k'][::reduce_k]
-        filt_k = (k>kmin)*(k<kmax)
+        filt_k = (k > kmin) & (k < kmax)
         self.transfer_k = k[filt_k]
-        self.transfer_l = transfer['l'][:lmax-1]# Here there just needs to be an if statement-- If T--the following, if E--, then we need to use the separate Transfer Funct
+        self.transfer_l = transfer['l'][:lmax-1]
 
-       # if self.hmode == "T":
-        #    self.transfer_func = transfer['transfer'][0][:self.lmax - 1, ::self.reduce_k][:, filt_k]
-        #elif self.hmode == "E":
-         #   self.transfer_func = transfer['transfer'][1][:self.lmax - 1, ::self.reduce_k][:, filt_k]
-          #  self.transfer_func *= np.sqrt((self.transfer_l + 2) * (self.transfer_l + 1) * self.transfer_l * (self.transfer_l - 1))[:, None]
-       # self.transfer_func = transfer['transfer'][0][:lmax-1,::reduce_k][:,filt_k]
-        
-        if self.type=="soubhik":
-          
-            hmode = model_params.get("hmode")
-            assert hmode in ('T', 'E'), f"hmode must be 'T' or 'E', got {hmode}"
-
-            if hmode == 'T':
-                self.transfer_func = transfer['transfer'][0][:self.lmax - 1, ::self.reduce_k][:, filt_k]
-            else:  # hmode == "E"
-                self.transfer_func = transfer['transfer'][1][:self.lmax - 1, ::self.reduce_k][:, filt_k]# I Changed the--Logic so you need to properly compute the camb transfer function with the prefactor already set up! 
-                #self.transfer_func *= np.sqrt((self.transfer_l + 2) * (self.transfer_l + 1) * self.transfer_l * (self.transfer_l - 1))[:, None]
-                
-
-            self.fx_over_g = lambda x: self.H2_dotphi*(sici(x)[0]-np.sin(x))
-            self.hmode = hmode #model_params.get("hmode")
-            # Load parameters
-            # eta_star - comoving horizon at time of pair production = hotspot size
-            # eta_hs - distance from observer (intersecting with Hubble shell)
-            self.eta_star = model_params['eta_star']
-            self.eta_hs = model_params['eta_hs']
-            if self.eta_hs == 'rec':
-                self.eta_hs = self.eta_rec
-            assert self.eta_hs>=self.eta_rec-self.eta_star, "eta_HS = %.2f, eta_rec = %.2f, eta_star = %.2f"%(self.eta_hs, self.eta_rec, self.eta_star)
-            assert self.eta_hs<=self.eta_rec+self.eta_star, "eta_HS = %.2f, eta_rec = %.2f, eta_star = %.2f"%(self.eta_hs, self.eta_rec, self.eta_star)
-            
-            # Define maximum scale
-            self.theta_max = np.max([0.1,np.sqrt(4.*np.pi)*np.asarray(self.eta_star)/self.eta_0])
-            #assert self.eta_star<=1000, "Hot-spot radius must be smaller than patch size!"
-            print("Maximum scale: %.3f radians"%self.theta_max)
-            
+    # Branch for T vs E
+        if self.type == "soubhik_T":
+            self.transfer_func = transfer['transfer'][0][:lmax-1, ::reduce_k][:, filt_k]
+        elif self.type == "soubhik_E":
+            self.transfer_func = transfer['transfer'][1][:lmax-1, ::reduce_k][:, filt_k]
+            self.transfer_func *= np.sqrt((self.transfer_l + 2) * (self.transfer_l + 1) * 
+                                     self.transfer_l * (self.transfer_l - 1))[:, None]
         else:
-            raise Exception("Type %s unknown!"%type)
-        
+            raise ValueError(f"Unknown type: {self.type}")
+
+    #All the steps are here once we have picked the Transfer Function
+        self.fx_over_g = lambda x: self.H2_dotphi * (sici(x)[0] - np.sin(x))
+        self.eta_star = model_params['eta_star']
+        self.eta_hs = model_params.get('eta_hs', 'rec')
+        if self.eta_hs == 'rec':
+            self.eta_hs = self.eta_rec
+
+        assert self.eta_hs >= self.eta_rec - self.eta_star, "eta_HS too small"
+        assert self.eta_hs <= self.eta_rec + self.eta_star, "eta_HS too large"
+        self.theta_max = np.max([0.1, np.sqrt(4 * np.pi) * self.eta_star / self.eta_0])
     def get_y_map(self,pix,theta_misc=[0.,0.]):
         
         theta_vec = np.linspace(0.,self.theta_max,1000)
         
-        if self.type=='soubhik':
-            model_file = 'model_%s_%s_eta(%.2f,%.2f)_l%d_k(%.2f,%.2f,%d).npy'%(self.type,self.hmode,self.eta_star,self.eta_hs,self.lmax,self.kmin,self.kmax,self.reduce_k)
+        if self.type=='soubhik_T':
+            model_file = 'model_%s_eta(%.2f,%.2f)_l%d_k(%.2f,%.2f,%d).npy'%(self.type,self.eta_star,self.eta_hs,self.lmax,self.kmin,self.kmax,self.reduce_k)
+            if os.path.exists(model_file):
+                p_cal_vec = np.load(model_file)
+            else:
+                p_cal_vec = self.get_angular_profile(theta_vec)
+                np.save(model_file, p_cal_vec)
+        elif self.type=='soubhik_E':
+            model_file = 'model_%s_eta(%.2f,%.2f)_l%d_k(%.2f,%.2f,%d).npy'%(self.type,self.eta_star,self.eta_hs,self.lmax,self.kmin,self.kmax,self.reduce_k)
             if os.path.exists(model_file):
                 p_cal_vec = np.load(model_file)
             else:
@@ -465,22 +447,20 @@ class png:
         p_cal_map = np.interp(theta_map,theta_vec,p_cal_vec,right=0.)
 
         return p_cal_map
-        
-    def get_angular_profile(self,theta_vec):
+
+    def get_angular_profile(self, theta_vec):
         """Compute the hot-spot profile (without the factor of g, and in dimensionless units)"""
 
         print("Computing hotspot profile with n_l: %d, n_k: %d"%(len(self.transfer_l),len(self.transfer_k)))
-        
         # Compute all Legendre polynomials
         all_legs = np.stack([lpmn(0,max(self.transfer_l),np.cos(theta))[0].ravel() for theta in theta_vec]).T[2:]
 
         # Compute all Bessel functions
         bessels = spherical_jn(self.transfer_l[:,None],self.transfer_k*(self.eta_0-self.eta_hs))
-    
         # Perform k integral
         k_integ = integrate.simpson(bessels*self.transfer_func*self.fx_over_g(self.transfer_k*self.eta_star)/self.transfer_k,self.transfer_k)/(2.*np.pi**2.)
         return np.sum(((2.*self.transfer_l+1.)*k_integ)[:,None]*all_legs,axis=0)
-
+    
     def get_t_map(self,pix,exp,theta_misc=[0.,0.],eval_type="standard",sed=None): #returns t map in units of muK
 
         y_map = self.get_y_map(pix,theta_misc=theta_misc)

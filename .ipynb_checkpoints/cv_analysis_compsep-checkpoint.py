@@ -27,8 +27,8 @@ params_data = szifi.params_data_default
 params_model = szifi.params_model_default
 
 # Data paths
-params_szifi['path'] = '/mnt/home/ophilcox/szifi/'
-cutout_dir = '/mnt/home/ophilcox/ceph/szifi_cutouts/cv_sep/'
+params_szifi['path'] = '/insomnia001/home/lha2126/szifi/'
+cutout_dir = '/insomnia001/home/lha2126/ceph/szifi_cutouts/cv_sep/'
 if not os.path.exists(cutout_dir): os.makedirs(cutout_dir)
 params_szifi['path_data'] = cutout_dir 
 
@@ -133,14 +133,14 @@ else:
 
     # Load frequency maps
     print("Loading component-separation maps")
-    freq_maps = [hp.read_map('/mnt/home/ophilcox/ceph/planck_npipe/cv_sim.fits')]
+    freq_maps = [hp.read_map('/insomnia001/home/lha2126/ceph/planck_npipe/cv_sim.fits')]
     
     # Load point-source mask
     print("Loading point mask")
-    all_point = hp.read_map('/mnt/home/ophilcox/ceph/planck_npipe/COM_Mask_CMB-Inpainting-Mask-Int_2048_R3.00.fits')
+    all_point = hp.read_map('/insomnia001/home/lha2126/ceph/planck_npipe/COM_Mask_CMB-Inpainting-Mask-Int_2048_R3.00.fits')
 
     # Load common mask
-    gal_map = hp.read_map('/mnt/home/ophilcox/ceph/planck_npipe/COM_Mask_CMB-common-Mask-Int_2048_R3.00.fits')
+    gal_map = hp.read_map('/insomnia001/home/lha2126/ceph/planck_npipe/COM_Mask_CMB-common-Mask-Int_2048_R3.00.fits')
 
     print("Generating cutouts")
     for i in params_data['field_ids']:

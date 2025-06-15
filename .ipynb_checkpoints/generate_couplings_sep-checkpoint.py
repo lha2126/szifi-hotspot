@@ -13,8 +13,8 @@ params_data = szifi.params_data_default
 params_model = szifi.params_model_default
 
 # Data paths
-params_szifi['path'] = '/mnt/home/ophilcox/szifi/'
-cutout_dir = '/mnt/home/ophilcox/ceph/szifi_cutouts/ffp10_sep_%d/'%sim_no
+params_szifi['path'] = '/insomnia001/home/lha2126/szifi/'
+cutout_dir = '/insomnia001/home/lha2126/ceph/szifi_cutouts/ffp10_sep_%d/'%sim_no
 if not os.path.exists(cutout_dir): os.makedirs(cutout_dir)
 params_szifi['path_data'] = cutout_dir 
 

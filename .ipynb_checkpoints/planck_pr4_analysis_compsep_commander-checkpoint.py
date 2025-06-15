@@ -27,8 +27,8 @@ params_data = szifi.params_data_default
 params_model = szifi.params_model_default
 
 # Data paths
-params_szifi['path'] = '/mnt/home/ophilcox/szifi/'
-cutout_dir = '/mnt/home/ophilcox/ceph/szifi_cutouts/planck_sepC/'
+params_szifi['path'] = '/insomnia001/home/lha2126/szifi/'
+cutout_dir = '/insomnia001/home/lha2126/ceph/szifi_cutouts/planck_sepC/'
 if not os.path.exists(cutout_dir): os.makedirs(cutout_dir)
 params_szifi['path_data'] = cutout_dir 
 
@@ -133,16 +133,16 @@ else:
     
     # Input files
     print("Loading component-separation maps")
-    dipole_map = hp.read_map('/mnt/home/ophilcox/ceph/planck_npipe/commander/dipole_CMB_n4096_K.fits',field=0)
-    freq_maps = [hp.ud_grade(1e-6*hp.read_map('/mnt/home/ophilcox/ceph/planck_npipe/commander/data_rc1_temperature/cmb_Commander_npipe6v20.fits',field=0)-dipole_map,2048)]
+    dipole_map = hp.read_map('/insomnia001/home/lha2126/ceph/planck_npipe/commander/dipole_CMB_n4096_K.fits',field=0)
+    freq_maps = [hp.ud_grade(1e-6*hp.read_map('/insomnia001/home/lha2126/ceph/planck_npipe/commander/data_rc1_temperature/cmb_Commander_npipe6v20.fits',field=0)-dipole_map,2048)]
     del dipole_map
     
     # Load point-source mask
     print("Loading point mask")
-    all_point = hp.read_map('/mnt/home/ophilcox/ceph/planck_npipe/COM_Mask_CMB-Inpainting-Mask-Int_2048_R3.00.fits')
+    all_point = hp.read_map('/insomnia001/home/lha2126/ceph/planck_npipe/COM_Mask_CMB-Inpainting-Mask-Int_2048_R3.00.fits')
 
     # Load common mask
-    gal_map = hp.read_map('/mnt/home/ophilcox/ceph/planck_npipe/COM_Mask_CMB-common-Mask-Int_2048_R3.00.fits')
+    gal_map = hp.read_map('/insomnia001/home/lha2126/ceph/planck_npipe/COM_Mask_CMB-common-Mask-Int_2048_R3.00.fits')
 
     print("Generating cutouts")
     for i in params_data['field_ids']:

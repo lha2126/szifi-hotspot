@@ -27,11 +27,11 @@ params_data = szifi.params_data_default
 params_model = szifi.params_model_default
 
 # Data paths
-params_szifi['path'] = '/mnt/home/ophilcox/szifi/'
+params_szifi['path'] = '/insomnia001/home/lha2126/szifi/'
 if analysis_type =='point':
-    cutout_dir = '/mnt/home/ophilcox/ceph/szifi_cutouts/planck_raw/'
+    cutout_dir = '/insomnia001/home/lha2126/ceph/szifi_cutouts/planck_raw/'
 else:
-    cutout_dir = '/mnt/home/ophilcox/ceph/szifi_cutouts/planck_cleaned/'
+    cutout_dir = '/insomnia001/home/lha2126/ceph/szifi_cutouts/planck_cleaned/'
 if not os.path.exists(cutout_dir): os.makedirs(cutout_dir)
 params_szifi['path_data'] = cutout_dir 
 
@@ -130,11 +130,11 @@ else:
     print("Loading Planck data")
 
     # Parameters
-    sim_dir = '/mnt/home/ophilcox/ceph/planck_pr4_freq/'
+    sim_dir = '/insomnia001/home/lha2126/ceph/planck_pr4_freq/'
     freqs = ['100','143','217','353','545','857']
 
     # Load dipole
-    dipole_map = hp.ud_grade(hp.read_map('/mnt/home/ophilcox/ceph/planck_npipe/commander/dipole_CMB_n4096_K.fits',field=[0]),2048)
+    dipole_map = hp.ud_grade(hp.read_map('/insomnia001/home/lha2126/ceph/planck_npipe/commander/dipole_CMB_n4096_K.fits',field=[0]),2048)
 
     # Load frequency maps
     print("Loading frequency maps")
@@ -143,7 +143,7 @@ else:
         freq_maps.append(hp.read_map(sim_dir+'planck/npipe6v20_%s_map.fits'%(freqs[f]),field=0)-dipole_map)
 
     # Load point-source mask
-    planck_dir = '/mnt/home/ophilcox/ceph/planck_pr3_raw/'
+    planck_dir = '/insomnia001/home/lha2126/ceph/planck_pr3_raw/'
     if analysis_type != 'point':
         print("Loading point mask")
         all_point = hp.ud_grade(hp.read_map(sim_dir+'planck/point_mask_snr10.fits'),2048)

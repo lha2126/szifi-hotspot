@@ -13,7 +13,6 @@ class experiment:
         
         png_sed_model = sed.png_model()
         self.png_sed = png_sed_model.get_sed_exp_bandpass(self)
-                  
         if self.experiment_name == "Planck_pr4_compsep":
             
             self.nu_eff = np.array([101.31])*1e9
@@ -26,26 +25,41 @@ class experiment:
             tsz_sed_model = sed.tsz_model()
             self.tsz_sed = tsz_sed_model.get_sed_exp_bandpass(self)
             self.bandpass_file = fits.open(params_szifi["path"] + "data/HFI_RIMO_Beams-075pc_R2.00.fits")
-        #A new experiment for the Planck E-Modes
-        if self.experiment_name == "Planck_pr4_compsep_E_data":
-
-            self.nu_eff = np.array([101.31])*1e9
-
+    #JUST COMMENTING THINGS OUT REDOING EVERYTHING EXACTLY THE SAME--> MAYBE ADD IN T LATER              
+        #if self.experiment_name == "Planck_pr4_compsep":
+            
+            #self.nu_eff = np.array([101.31])*1e9
+            
             # Load beam
-            self.beams = [fits.open('/insomnia001/home/lha2126/ceph/planck_npipe/COM_CMB_IQU-smica_2048_R3.00_full.fits',field=2)[2].data['POL_BEAM'][:4001]]
-
-            self.FWHM = np.array([5.0])
-
-            tsz_sed_model = sed.tsz_model()
-            self.tsz_sed = tsz_sed_model.get_sed_exp_bandpass(self)
-            self.bandpass_file = fits.open(params_szifi["path"] + "data/HFI_RIMO_Beams-075pc_R2.00.fits")
-
+            #self.beams = [fits.open('/insomnia001/home/lha2126/ceph/planck_npipe/COM_CMB_IQU-smica_2048_R3.00_full.fits',field=2)[2].data['INT_BEAM'][:4001]]#LHA edits file
+            
+            #self.FWHM = np.array([5.0]) 
+            
+            #tsz_sed_model = sed.tsz_model()
+            #self.tsz_sed = tsz_sed_model.get_sed_exp_bandpass(self)
+            #self.bandpass_file = fits.open(params_szifi["path"] + "data/HFI_RIMO_Beams-075pc_R2.00.fits")
+            
+            #ADDING In E-MODES AS A SEPARATE EXPERIMENT
+            
+        #if self.experiment_name == "Planck_pr4_compsep_EMODES":
+            
+            #self.nu_eff = np.array([101.31])*1e9
+            
+            # Load beam
+            #self.beams = [fits.open('/insomnia001/home/lha2126/ceph/planck_npipe/COM_CMB_IQU-smica_2048_R3.00_full.fits',field=2)[2].data['POL_BEAM'][:4001]]#LHA edits file+ ADDS IN THE POLARIZATION BEAM 
+            
+            #self.FWHM = np.array([5.0]) 
+            
+            #tsz_sed_model = sed.tsz_model()
+            #self.tsz_sed = tsz_sed_model.get_sed_exp_bandpass(self)
+            #self.bandpass_file = fits.open(params_szifi["path"] + "data/HFI_RIMO_Beams-075pc_R2.00.fits")
+           
         if self.experiment_name == "cv_compsep":
             
             self.nu_eff = np.array([101.31])*1e9
             
             # Load beam
-            self.beams = [fits.open('/insomnia001/home/lha2126/ceph/planck_npipe/COM_CMB_IQU-smica_2048_R3.00_full.fits',field=2)[2].data['INT_BEAM'][:4001]]
+            self.beams = [fits.open('/insomnia001/home/lha2126/ceph/planck_npipe/COM_CMB_IQU-smica_2048_R3.00_full.fits',field=2)[2].data['INT_BEAM'][:4001]]#LHA edits file
             self.beams[0][2:] = 1.
             
             self.FWHM = np.array([0.0]) 
@@ -164,13 +178,13 @@ class experiment:
         ell = np.arange(0,len(ptf))
 
         return ell,ptf
-#LHA JUST CHANGING THINGS SO THAT the E-mode data from planck is handled the same way as T
+
     def get_band_transmission(self):
 
-        if (self.experiment_name == "Planck_real") or (self.experiment_name == "Planck_pr4") or (self.experiment_name == "Planck_pr4_compsep") or (self.experiment_name=="Planck_pr4_compsep_E_data") or (self.experiment_name == "cv_compsep"):
+        if (self.experiment_name == "Planck_real") or (self.experiment_name == "Planck_pr4") or (self.experiment_name == "Planck_pr4_compsep") or (self.experiment_name == "cv_compsep"):
 
             bandpass_file = fits.open(self.params_szifi["path"] + "data/HFI_RIMO_R3.00.fits")
-            if (self.experiment_name=="Planck_pr4_compsep") or (self.experiment_name=='cv_compsep') or (self.experiment_name=="Planck_pr4_compsep_E_data"):
+            if (self.experiment_name=="Planck_pr4_compsep") or (self.experiment_name=='cv_compsep'):
                 channel_indices = [3]
             else:
                 channel_indices = [3,4,5,6,7,8]

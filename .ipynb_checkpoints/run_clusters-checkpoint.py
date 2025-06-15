@@ -14,8 +14,8 @@ params_data = szifi.params_data_default
 params_model = szifi.params_model_default
 
 # Data paths
-params_szifi['path'] = '/mnt/home/ophilcox/szifi/'
-cutout_dir = '/mnt/home/ophilcox/ceph/szifi_cutouts/ffp10_%d/'%sim_no
+params_szifi['path'] = '/insomnia001/home/lha2126/szifi/'
+cutout_dir = '/insomnia001/home/lha2126/ceph/szifi_cutouts/ffp10_%d/'%sim_no
 if not os.path.exists(cutout_dir): os.makedirs(cutout_dir)
 
 # Fields
@@ -59,7 +59,7 @@ params_szifi['save_snr_maps'] = False
 params_szifi['png_signal'] = True
 
 print("Preloading dataset")
-params_szifi['path_data'] = '/mnt/home/ophilcox/ceph/szifi_cutouts/'
+params_szifi['path_data'] = '/insomnia001/home/lha2126/ceph/szifi_cutouts/'
 data = szifi.input_data(params_szifi=params_szifi,params_data=params_data)
 params_szifi['path_data'] = cutout_dir
 
@@ -72,11 +72,11 @@ nside_tile = data.nside_tile
 print("Loading simulation %d"%sim_no)
 
 # Parameters
-sim_dir = '/mnt/home/ophilcox/ceph/planck_pr4_freq/'
+sim_dir = '/insomnia001/home/lha2126/ceph/planck_pr4_freq/'
 freqs = ['100','143','217','353','545','857']
 
 # Load dipole
-dipole_map = hp.ud_grade(hp.read_map('/mnt/home/ophilcox/ceph/planck_npipe/commander/dipole_CMB_n4096_K.fits',field=[0]),2048)
+dipole_map = hp.ud_grade(hp.read_map('/insomnia001/home/lha2126/ceph/planck_npipe/commander/dipole_CMB_n4096_K.fits',field=[0]),2048)
 
 # Load frequency maps
 print("Loading frequency maps")

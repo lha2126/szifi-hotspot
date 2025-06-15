@@ -9,14 +9,17 @@ import numpy as np, szifi, healpy as hp, sys, os
 import matplotlib.pyplot as plt
 
 ## Input options
-assert len(sys.argv) == 3, "Must supply analysis type and tile number"
+assert len(sys.argv) == 4, "Must supply analysis type,hotspot mode, and tile number"
 
 # Choose which type of template
 # Options = 'soubhik' [inflationary], 'arnaud' [tSZ cluster], 'point' [point-source]
 source_type = str(sys.argv[1])
 assert source_type in ['soubhik','arnaud','point'], "Analysis type must be 'soubhik', 'arnaud', or 'point'"
+#type of inflationary hotspot
+hmode = str(sys.argv[2])#LHA Adding this in so that it is all easier later on
+assert hmode in ['T','E'], "Analysis type must be 'T' or' E'" #This is sort of ugly at the moment because it should be such that you need T/E, even if you dont use soubhik, but then irrelevant
 # Define which cut-out to use
-tile_no = int(sys.argv[2])
+tile_no = int(sys.argv[3])
 assert tile_no >= 0 and tile_no < 768, "Tile number must be between 0 and 767"
 
 ### DEFAULT PARAMETERS
@@ -26,8 +29,8 @@ params_model = szifi.params_model_default
 
 # Data paths
 output_dir = 'outputs_planck/' # output catalogs
-params_szifi['path'] = '/mnt/home/ophilcox/szifi_hotspot/' # main code
-cutout_dir = '/mnt/home/ophilcox/ceph/szifi_cutouts_new/planck_sep/' # all cutouts (will be large)
+params_szifi['path'] = '/insomnia001/home/lha2126/szifi-hotspot/' # main code
+cutout_dir = '/insomnia001/home/lha2126/ceph/szifi_cutouts_new/planck_sep/' # all cutouts (will be large)
 if not os.path.exists(cutout_dir): os.makedirs(cutout_dir)
 if not os.path.exists(output_dir): os.makedirs(output_dir)
 params_szifi['path_data'] = cutout_dir 
@@ -39,7 +42,7 @@ if os.path.exists(output_dir+'planck_sep_batch%d_%s.npy'%(tile_no,source_type)):
 
 # Fields
 params_data["field_ids"] = [tile_no]
-params_data['data_set'] = 'Planck_pr4_compsep' # specifies szifi settings for the beam (experiment dependent)
+params_data['data_set'] = 'Planck_pr4_compsep_E_data' # specifies szifi settings for the beam (experiment dependent)
 
 # Load cosmology parameters
 import camb
@@ -138,19 +141,28 @@ else:
     
     # Parameters
     freqs = ['100'] # dummy, not used directly
-    if len(freqs)==0: assert source_type=='soubhik': "Must use full frequency maps to find point-sources and tSZ clusters"
+    if len(freqs)==0: assert source_type=='soubhik', "Must use full frequency maps to find point-sources and tSZ clusters"#Syntax error :-->, LHA
 
     # Load component-separated temperature maps
     print("Loading component-separation maps")
-    freq_maps = [hp.read_map('/mnt/home/ophilcox/ceph/planck_npipe/sevem/SEVEM_NPIPE_2019/npipe6v20_sevem_cmb_005a_2048.fits')]
+    #If statement so it knows how to get either polarization T-Mode--This is super hacky but I wanted to be able to test the functionality for both without having to change files every time 
+    #if hmode=='T': 
+        #freq_maps = [hp.read_map('/insomnia001/home/lha2126/ceph/planck_npipe/sevem/SEVEM_NPIPE_2019/npipe6v20_sevem_cmb_005a_2048.fits')]
     
     # Load point-source mask
-    print("Loading point mask")
-    all_point = hp.read_map('/mnt/home/ophilcox/ceph/planck_npipe/COM_Mask_CMB-Inpainting-Mask-Int_2048_R3.00.fits')
+    print("Loading Temperature point mask")
+        #all_point = hp.read_map('/insomnia001/home/lha2126/ceph/planck_npipe/COM_Mask_CMB-Inpainting-Mask-Int_2048_R3.00.fits')
 
-    # Load common mask (to remove the Galactic plane)
-    gal_map = hp.read_map('/mnt/home/ophilcox/ceph/planck_npipe/COM_Mask_CMB-common-Mask-Int_2048_R3.00.fits')
+        # Load common mask (to remove the Galactic plane)
+       # gal_map = hp.read_map('/insomnia001/home/lha2126/ceph/planck_npipe/COM_Mask_CMB-common-Mask-Int_2048_R3.00.fits')      
+    freq_maps = [hp.read_map('/insomnia001/home/lha2126/ceph/planck_npipe/sevem/SEVEM_NPIPE_2019/npipe6v20_sevem_cmb_EMODES.fits')]
 
+    # Load point-source mask
+    print("Loading E-Mode point mask")
+    all_point = hp.read_map('/insomnia001/home/lha2126/ceph/planck_npipe/COM_Mask_CMB-Inpainting-Mask-Pol_2048_R3.00.fits')
+
+        # Load common mask (to remove the Galactic plane)
+    gal_map = hp.read_map('/insomnia001/home/lha2126/ceph/planck_npipe/COM_Mask_CMB-common-Mask-Pol_2048_R3.00.fits')
     # Create flat-sky cut-outs of this map.
     # These are saved and reused (i.e. they are *not* overwritten)
     # Change the "cutout_dir" if you want to make cutouts of a new map.

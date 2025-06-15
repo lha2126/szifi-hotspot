@@ -104,7 +104,7 @@ class input_data:
             self.data["experiment"] = expt.experiment(experiment_name=params_data['data_set'],params_szifi=params_szifi)
 
         
-        if (params_data["data_set"] == "Planck_pr4_compsep") or (params_data["data_set"] == "cv_compsep"):
+        if (params_data["data_set"] == "Planck_pr4_compsep") or (params_data["data_set"] == "Planck_pr4_compsep_E_data")  or (params_data["data_set"] == "cv_compsep"):
 
             self.nside_tile = 8
             self.n_tile = hp.nside2npix(self.nside_tile)
@@ -121,6 +121,8 @@ class input_data:
                 exp_str = 'planck'
             elif params_data["data_set"] == "cv_compsep":
                 exp_str = 'cv'
+            elif params_data["data_set"] == "Planck_pr4_compsep_E_data": #LHA SIMPLE CHANGE TO HAVE THE NEW PLANCK DATA HANDLED IDENTICALLY
+                exp_str = 'planck'
             
             for field_id in field_ids:
 

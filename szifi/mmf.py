@@ -23,6 +23,7 @@ class cluster_finder:
         elif self.params_model['profile_type']=='soubhik':
             self.profile_params['eta_star_vec'] = self.params_szifi['eta_star_vec']
             self.profile_params['eta_hs_vec'] = self.params_szifi['eta_hs_vec']
+            #self.params_model['hmode'] = hmode #where we need hmpde
         self.rank = rank
         self.exp = self.data_file["experiment"]
 
@@ -519,7 +520,8 @@ class filter_maps:
                     if self.rank == 0: print("eta_HS",j,self.profile_params['eta_hs_vec'][j])
 
                     model_params = {'eta_star':self.profile_params['eta_star_vec'][j],
-                                    'eta_hs':self.profile_params['eta_hs_vec'][j]}
+                                    'eta_hs':self.profile_params['eta_hs_vec'][j],
+                                   'hmode': self.params_model.get('hmode','E')}
         
                     profile = model.png(model_params,kmin=1e-6,kmax=1,lmax=3500,reduce_k=20,type="soubhik")
                     t_tem, t_tem_nc = profile.get_t_map_convolved(self.pix,self.exp, beam=self.params["beam"], theta_cart=[(0.5*self.pix.nx+subgrid_ix[k])*self.pix.dx,(0.5*self.pix.nx+subgrid_jx[k])*self.pix.dx],get_nc=True,sed=False)
@@ -536,6 +538,7 @@ class filter_maps:
 
                 q_map,y_map,std = get_mmf_q_map(t_obs,tem,self.inv_cov,self.pix,mmf_type=self.params["mmf_type"],
                 cmmf_prec=self.cmmf,tem_nc=tem_nc)
+                print('qy', q_map.mean(), y_map.mean())
 
                 if self.params["save_snr_maps"] == True:
 
