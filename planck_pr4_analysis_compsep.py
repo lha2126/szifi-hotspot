@@ -28,7 +28,7 @@ params_data = szifi.params_data_default
 params_model = szifi.params_model_default
 
 # Data paths
-output_dir = 'outputs_planck/' # output catalogs
+output_dir = 'T_outputs_planck/' # output catalogs
 params_szifi['path'] = '/insomnia001/home/lha2126/szifi-hotspot/' # main code
 cutout_dir = '/insomnia001/home/lha2126/ceph/szifi_cutouts_new/planck_sep/' # all cutouts (will be large)
 if not os.path.exists(cutout_dir): os.makedirs(cutout_dir)
@@ -42,7 +42,7 @@ if os.path.exists(output_dir+'planck_sep_batch%d_%s.npy'%(tile_no,source_type)):
 
 # Fields
 params_data["field_ids"] = [tile_no]
-params_data['data_set'] = 'Planck_pr4_compsep_E_data' # specifies szifi settings for the beam (experiment dependent)
+params_data['data_set'] = 'Planck_pr4_compsep' # _E_data' # specifies szifi settings for the beam (experiment dependent)
 
 # Load cosmology parameters
 import camb
@@ -74,6 +74,7 @@ eta_hss = np.asarray(eta_hss)
 params_szifi['theta_500_vec_arcmin'] = theta_500
 params_szifi['eta_star_vec'] = eta_stars
 params_szifi['eta_hs_vec'] = eta_hss
+params_model['hmode'] = hmode# We Shall see if this does anything!--IDEA IS TO JUST ADD A PAR in. 
 
 # Some other options
 if source_type=='arnaud':
