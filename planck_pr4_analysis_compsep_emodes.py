@@ -74,7 +74,7 @@ eta_hss = np.asarray(eta_hss)
 params_szifi['theta_500_vec_arcmin'] = theta_500
 params_szifi['eta_star_vec'] = eta_stars
 params_szifi['eta_hs_vec'] = eta_hss
-
+params_model['hmode'] = hmode
 # Some other options
 if source_type=='arnaud':
     params_szifi['iterative'] = True # whether to iteratively mask out the sources (good if there's a signal)

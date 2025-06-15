@@ -24,3 +24,12 @@ This version has been heavily modified by Oliver Philcox and Colin Hill to add i
 - ```Planck-Analysis.ipynb```. Analyze the Planck hotspot candidates computed using the python script.
 - ```injected_analysis_compsep.py {g} {INDEX}```. This splits a simulation into 768 flat-sky tiles as before, and injects 300 well-separated hotspots with some value of g. It then seaerches for hotspots, as before.
 - ```Injection-Test.ipynb```. Create a map of injected point sources which are used in the python script. Also analyze the results of the python script and make a bunch of plots.
+
+### Luca's E-mode Functionality Notes
+This version has been minorly modified but Luca Abu El-Haj to add in functionality for E-mode inflationary pairwise hotspots, extending the work of https://arxiv.org/abs/2405.03738. The basic changes to the above routines are as follows: 
+-  ```planck_pr4_analysis_compsep.py {TYPE} {HMODE} {INDEX}```. Now takes an argument called hmode-- the mode of hotspot which can either be 'T', or 'E'. Currently the default is set to 'E', as such if one wanted to do a TSZ or point soutce, there is no additional impact from the adition of argument. 
+-Added a new "experiment" for component separated E-mode data, called Planck_pr4_compsep_E_data which uses the smica polarization beam.
+-Note that for camb precomputed transfer functions for this code the should be saved in a precorrected form, where all E Transfer function values must be multiplied by, $\sqrt{(l + 2) * (l + 1) * l * (l - 1)}$, and added a notebook with an example of my computation of this transfer function. This is of course not at all novel, but perhaps a harmless small addition. 
+-Created a new script ```planck_pr4_analysis_compsep_emodes.py```, which is nearly identical to the above, but differentiates between E, and T with the data and mask files.
+-Made analagous changes to the ```injected_analysis_compsep.py```, where now, ```injected_analysis_compsep_eitheroption.py {g} {INDEX} {hmode}``` will go through the same functionality as before but with an added E Mode option for the simulation.
+
