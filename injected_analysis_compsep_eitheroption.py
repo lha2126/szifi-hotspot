@@ -157,7 +157,7 @@ else:
 
     # Load component-separated temperature maps (from a single FFP10 simulation)
     print("Loading component-separation maps")
-    freq_maps = [hp.read_map('/insomnia001/home/lha2126/ceph/planck_npipe/sevem/SEVEM_NPIPE_sims/SEVEM_NPIPE_cmb_sim%s.fits'%(str(sim_no+200).zfill(4)))+hp.read_map('/insomnia001/home/lha2126/ceph/planck_npipe/sevem/SEVEM_NPIPE_sims/SEVEM_NPIPE_noise_sim%s.fits'%(str(sim_no+200).zfill(4)))]
+    freq_maps = [hp.read_map('/insomnia001/home/lha2126/ceph/planck_npipe/sevem/SEVEM_NPIPE_sims/SEVEM_NPIPE_cmb_Emodes_sim%s.fits'%(str(sim_no+200).zfill(4)))+hp.read_map('/insomnia001/home/lha2126/ceph/planck_npipe/sevem/SEVEM_NPIPE_sims/SEVEM_NPIPE_noise_Emodes_sim%s.fits'%(str(sim_no+200).zfill(4)))]
     
     # Load point-source mask
     print("Loading point mask")

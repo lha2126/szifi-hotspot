@@ -173,8 +173,8 @@ def integrate_sed_bandpass(sed_func=None,exp=None):
         sed = sed_func(nu)*muK_to_MJysr(nu)
 
         # Simpson's rule can give NaN's here due to repeated values in nu
-        sed_bandpass[i] = integrate.trapz(transmission*sed,nu)
-        conversion[i] = integrate.trapz(transmission*muK_to_MJysr(nu),nu)
+        sed_bandpass[i] = integrate.simpson(transmission*sed,nu)#swapped to simpson for simplicity
+        conversion[i] = integrate.simpson(transmission*muK_to_MJysr(nu),nu)
         
     sed_bandpass = sed_bandpass/conversion
 
